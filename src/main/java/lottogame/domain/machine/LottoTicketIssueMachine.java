@@ -27,6 +27,10 @@ public class LottoTicketIssueMachine {
         validateCanBuyCount(this.manualTicketCount);
     }
 
+    public static int getTicketPrice() {
+        return TICKET_PRICE;
+    }
+
     private void validateMinPurchaseAmount(final Money money) {
         if (!money.canBuyAmount(TICKET_PRICE)) {
             throw new IllegalArgumentException("구입금액은 " + TICKET_PRICE + "원 이상이어야 합니다.");
@@ -39,16 +43,23 @@ public class LottoTicketIssueMachine {
         }
     }
 
-    public LottoTickets issueManualTickets(final List<Set<Integer>> manualTicketNumbers) {
+    public LottoTickets issueManualTickets(final List<List<Integer>> manualTicketNumbers) {
         List<LottoTicket> lottoTickets = new ArrayList<>();
-        for (Set<Integer> ticketNumbers : manualTicketNumbers) {
+        for (List<Integer> ticketNumbers : manualTicketNumbers) {
+            validateNumberCount(ticketNumbers);
             this.money.spent(TICKET_PRICE);
             lottoTickets.add(new LottoTicket(convertToLottoNumbers(ticketNumbers)));
         }
         return new LottoTickets(lottoTickets);
     }
 
-    private Set<LottoNumber> convertToLottoNumbers(Set<Integer> ticketNumbers) {
+    private void validateNumberCount(final List<Integer> ticketNumbers) {
+        if (new HashSet<>(ticketNumbers).size() != ticketNumbers.size()) {
+            throw new IllegalArgumentException("유효하지 않은 번호 개수 입니다.");
+        }
+    }
+
+    private Set<LottoNumber> convertToLottoNumbers(List<Integer> ticketNumbers) {
         return ticketNumbers.stream()
             .map(LottoNumber::valueOf)
             .collect(Collectors.toSet());
@@ -67,9 +78,5 @@ public class LottoTicketIssueMachine {
         List<LottoNumber> numbers = new ArrayList<>(LottoNumber.numbers());
         Collections.shuffle(numbers);
         return new HashSet<>(numbers.subList(0, LOTTO_NUMBER_COUNT));
-    }
-
-    public static int getTicketPrice() {
-        return TICKET_PRICE;
     }
 }

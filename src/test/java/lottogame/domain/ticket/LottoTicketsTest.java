@@ -2,9 +2,9 @@ package lottogame.domain.ticket;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import lottogame.domain.Count;
 import lottogame.domain.Money;
 import lottogame.domain.machine.LottoTicketIssueMachine;
@@ -28,7 +28,7 @@ public class LottoTicketsTest {
         LottoTicketIssueMachine lottoTicketIssueMachine =
             new LottoTicketIssueMachine(new Money(2000), new Count(1));
         LottoTickets manualTickets = lottoTicketIssueMachine.issueManualTickets(
-            Collections.singletonList(new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6)))
+            Collections.singletonList(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6)))
         );
         LottoTickets autoTickets = lottoTicketIssueMachine.issueAutoTickets();
         assertThat(manualTickets.getLottoTickets()).hasSize(1);

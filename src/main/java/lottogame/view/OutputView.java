@@ -7,7 +7,7 @@ import lottogame.domain.Rank;
 
 public class OutputView {
 
-    private static final String TICKETS_COUNT_PRINT_FORMAT = "수동으로 %d장, 자동으로 %d장를 구매했습니다.";
+    private static final String TICKETS_COUNT_PRINT_FORMAT = "수동으로 %d장, 자동으로 %d장을 구매했습니다.";
     private static final String DEFAULT_RANK_PRINT_FORMAT = "%d개 일치 (%d원)- %d개";
     private static final String BONUS_RANK_PRINT_FORMAT = "%d개 일치, 보너스 볼 일치(%d원) - %d개";
 

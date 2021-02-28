@@ -1,9 +1,9 @@
 package lottogame.controller;
 
 import java.util.List;
-import java.util.Set;
 import lottogame.domain.Count;
 import lottogame.domain.LottoGame;
+import lottogame.domain.MatchResults;
 import lottogame.domain.Money;
 import lottogame.domain.machine.LottoTicketIssueMachine;
 import lottogame.domain.number.LottoWinningNumbers;
@@ -24,12 +24,13 @@ public class LottoGameController {
         LottoTickets lottoTickets = getLottoTickets(manualTicketCount, lottoGame);
         LottoWinningNumbers lottoWinningNumbers = getWinningNumbers();
 
-        OutputView.printLottoGameResult(lottoGame.getMatchingResult(lottoTickets, lottoWinningNumbers));
-        OutputView.printLottoGameYield(lottoGame.getYield(lottoTickets, lottoWinningNumbers));
+        MatchResults matchResults = lottoGame.getMatchingResult(lottoTickets, lottoWinningNumbers);
+        OutputView.printLottoGameResult(matchResults.getRanks());
+        OutputView.printLottoGameYield(lottoGame.getYield(matchResults));
     }
 
     private LottoTickets getLottoTickets(final Count manualTicketCount, final LottoGame lottoGame) {
-        List<Set<Integer>> manualTicketNumbers = InputView.inputManualTicketNumbers(manualTicketCount);
+        List<List<Integer>> manualTicketNumbers = InputView.inputManualTicketNumbers(manualTicketCount);
         LottoTickets manualTickets = lottoGame.issueManualTickets(manualTicketNumbers);
         LottoTickets autoTickets = lottoGame.issueAutoTickets();
         OutputView.printLottoTickets(manualTickets.getLottoTickets(), autoTickets.getLottoTickets());
@@ -37,7 +38,7 @@ public class LottoGameController {
     }
 
     private LottoWinningNumbers getWinningNumbers() {
-        Set<Integer> winningNumbers = InputView.inputWinningNumbers();
+        List<Integer> winningNumbers = InputView.inputWinningNumbers();
         int bonusNumber = InputView.inputBonusNumber();
         return new LottoWinningNumbers(winningNumbers, bonusNumber);
     }

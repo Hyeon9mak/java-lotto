@@ -1,5 +1,6 @@
 package lottogame.domain.number;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lottogame.domain.ticket.LottoTicket;
@@ -11,17 +12,24 @@ public class LottoWinningNumbers {
     private final Set<LottoNumber> winningNumbers;
     private final LottoNumber bonusNumber;
 
-    public LottoWinningNumbers(final Set<Integer> winningNumbers, final int bonusNumber) {
+    public LottoWinningNumbers(final List<Integer> winningNumbers, final int bonusNumber) {
         this.winningNumbers = convertWinningNumbers(winningNumbers);
         this.bonusNumber = LottoNumber.valueOf(bonusNumber);
         validateNumbersCount(this.winningNumbers);
-        validateDuplicate(this.winningNumbers, this.bonusNumber);
+        validateDuplicateNumber(this.winningNumbers, winningNumbers);
+        validateDuplicateBonus(this.winningNumbers, this.bonusNumber);
     }
 
-    private Set<LottoNumber> convertWinningNumbers(Set<Integer> winningNumbers) {
+    private Set<LottoNumber> convertWinningNumbers(List<Integer> winningNumbers) {
         return winningNumbers.stream()
             .map(LottoNumber::valueOf)
             .collect(Collectors.toSet());
+    }
+
+    private void validateDuplicateNumber(final Set<LottoNumber> winningNumbers, final List<Integer> numbers) {
+        if(winningNumbers.size() != numbers.size()){
+            throw new IllegalArgumentException("올바르지 않은 번호 입력입니다.");
+        }
     }
 
     private void validateNumbersCount(final Set<LottoNumber> winningNumbers) {
@@ -30,8 +38,7 @@ public class LottoWinningNumbers {
         }
     }
 
-    private void validateDuplicate(final Set<LottoNumber> winningNumbers,
-        final LottoNumber bonusNumber) {
+    private void validateDuplicateBonus(final Set<LottoNumber> winningNumbers, final LottoNumber bonusNumber) {
         if (winningNumbers.contains(bonusNumber)) {
             throw new IllegalArgumentException("보너스 번호가 당첨 번호에 포함되어 있습니다.");
         }

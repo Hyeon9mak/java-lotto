@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import lottogame.domain.machine.LottoTicketIssueMachine;
 import lottogame.domain.number.LottoWinningNumbers;
 import lottogame.domain.ticket.LottoTickets;
@@ -16,15 +14,15 @@ import org.junit.jupiter.api.Test;
 
 public class LottoGameTest {
 
-    private List<Set<Integer>> manualTicketNumbers;
+    private List<List<Integer>> manualTicketNumbers;
 
     @BeforeEach
     void setUp() {
         this.manualTicketNumbers = new ArrayList<>();
-        this.manualTicketNumbers.add(new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6)));
-        this.manualTicketNumbers.add(new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6)));
-        this.manualTicketNumbers.add(new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6)));
-        this.manualTicketNumbers.add(new HashSet<>(Arrays.asList(19, 18, 17, 16, 15, 14)));
+        this.manualTicketNumbers.add(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6)));
+        this.manualTicketNumbers.add(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6)));
+        this.manualTicketNumbers.add(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6)));
+        this.manualTicketNumbers.add(new ArrayList<>(Arrays.asList(19, 18, 17, 16, 15, 14)));
     }
 
     @Test
@@ -35,7 +33,8 @@ public class LottoGameTest {
         LottoTicketIssueMachine lottoTicketIssueMachine = new LottoTicketIssueMachine(money, count);
         LottoGame lottoGame = new LottoGame(lottoTicketIssueMachine);
 
-        assertThat(lottoGame.issueManualTickets(this.manualTicketNumbers).getLottoTickets()).hasSize(4);
+        assertThat(lottoGame.issueManualTickets(this.manualTicketNumbers).getLottoTickets())
+            .hasSize(4);
         assertThat(lottoGame.issueAutoTickets().getLottoTickets()).hasSize(6);
     }
 
@@ -48,8 +47,9 @@ public class LottoGameTest {
         LottoGame lottoGame = new LottoGame(lottoTicketIssueMachine);
 
         LottoTickets lottoTickets = lottoGame.issueManualTickets(this.manualTicketNumbers);
-        LottoWinningNumbers lottoWinningNumbers = new LottoWinningNumbers(new HashSet<>(Arrays.asList(1,2,3,8,9,10)), 19);
-
-        assertThat(lottoGame.getYield(lottoTickets, lottoWinningNumbers)).isEqualTo(3.75);
+        LottoWinningNumbers lottoWinningNumbers = new LottoWinningNumbers(
+            new ArrayList<>(Arrays.asList(1, 2, 3, 8, 9, 10)), 19);
+        MatchResults matchResults = lottoGame.getMatchingResult(lottoTickets, lottoWinningNumbers);
+        assertThat(lottoGame.getYield(matchResults)).isEqualTo(3.75);
     }
 }

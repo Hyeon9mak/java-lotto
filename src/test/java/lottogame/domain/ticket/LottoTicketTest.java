@@ -47,8 +47,9 @@ public class LottoTicketTest {
             .map(LottoNumber::valueOf)
             .collect(Collectors.toSet());
         Set<LottoNumber> emptySet = new HashSet<>();
+
         assertThatThrownBy(() -> new LottoTicket(manyCountSet)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(()->new LottoTicket(lessCountSet)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(()->new LottoTicket(emptySet)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new LottoTicket(lessCountSet)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new LottoTicket(emptySet)).isInstanceOf(IllegalArgumentException.class);
     }
 }
